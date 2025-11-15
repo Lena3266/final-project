@@ -14,3 +14,4 @@ def log_event(event_type, event_data):
     """Log events for debugging and analytics."""
     print(f"[{event_type}] {event_data}")
     return True
+
