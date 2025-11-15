@@ -2,3 +2,8 @@ fastapi
 uvicorn[standard]
 python-multipart
 pydantic
+pillow
+opencv-python-headless
+numpy
+
+
