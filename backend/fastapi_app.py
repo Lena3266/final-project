@@ -10,25 +10,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-# Check if multipart is available
-try:
-    import multipart
-    HAS_MULTIPART = True
-except ImportError:
-    HAS_MULTIPART = False
-
-try:
-    from backend.modules import backend_utils as bu
-    from backend.modules import db as dbmod
-except ImportError:
-    # For development: use relative imports if backend.modules is not available
-    try:
-        import backend_utils as bu
-        import db as dbmod
-    except ImportError:
-        bu = None
-        dbmod = None
-
 # Initialize FastAPI app
 app = FastAPI(
     title="Navi AI Backend",
@@ -48,7 +29,7 @@ app.add_middleware(
 # Health check endpoint
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "multipart_available": HAS_MULTIPART}
+    return {"status": "healthy", "version": "1.0.2"}
 
 # Root endpoint
 @app.get("/")
@@ -57,3 +38,6 @@ async def root():
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
