@@ -13,7 +13,7 @@ if (-not (Test-Path -Path $ImageFolder)) {
 }
 
 # Get all jpg/png/jpeg files from folder
-$Images = @(Get-ChildItem -Path $ImageFolder -Include *.jpg, *.png, *.jpeg -File)
+$Images = @(Get-ChildItem -Path $ImageFolder -File | Where-Object { $_.Extension -in '.jpg', '.png', '.jpeg' })
 
 if ($Images.Count -eq 0) {
     Write-Host "No images found in $ImageFolder"
@@ -38,12 +38,9 @@ try {
 foreach ($img in $Images) {
     Write-Host "Uploading $($img.FullName) ..."
 
-    # Wrap path in FileInfo object
-    $FileInfo = New-Object System.IO.FileInfo $img.FullName
-    $Form = @{ file = $FileInfo }
-
     try {
-        $Response = Invoke-RestMethod -Uri $BackendUrl -Method Post -Form $Form
+        # Use multipart form data for file upload
+        $Response = Invoke-RestMethod -Uri $BackendUrl -Method Post -InFile $img.FullName
         Write-Host "Response for $($img.Name):"
         $Response | ConvertTo-Json -Depth 10
     } catch {
