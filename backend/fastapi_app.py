@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
@@ -35,6 +35,21 @@ async def health_check():
 @app.get("/")
 async def root():
     return {"message": "Navi AI Backend is running"}
+
+# Detection endpoint (placeholder)
+@app.post("/detect")
+async def detect(file: UploadFile = File(...)):
+    """Detect objects in uploaded image."""
+    try:
+        contents = await file.read()
+        # Placeholder: Process image detection
+        return {
+            "status": "success",
+            "message": "Image processed",
+            "filename": file.filename
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
